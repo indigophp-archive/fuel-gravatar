@@ -53,20 +53,21 @@ class Gravatar
 
 	public function url()
 	{
-		$protocol = $this->config['protocol'];
+		$protocol = $this->config['protocol'] ? : strtolower(\Input::protocol());
 		$config = array(
 			's' => $this->config['size'],
 			'd' => $this->config['default_image'],
 			'r' => strtolower($this->config['rating']),
 		);
-		return $protocol . '://www.gravatar.com/avatar/' . md5( $this->email ) . '?' . http_build_query($config);
+		return $protocol . '://www.gravatar.com/avatar/' . md5( $this->email ) . '?' . http_build_query(array_filter($config));
 	}
 
-	public function img($attributes)
+	public function img(array $attributes = array())
 	{
 		$default_attributes = array(
-			'width' => $this->config['size'],
+			'width'  => $this->config['size'],
 			'height' => $this->config['size'],
+			'alt'    => 'Gravatar',
 		);
 		$attributes = \Arr::merge($default_attributes, $attributes);
 		return \Html::img($this->url(), $attributes);
