@@ -1,8 +1,14 @@
 <?php
-
 /**
- * 
+ * Fuel Gravatar
+ *
+ * @package 	Fuel
+ * @subpackage	Gravatar
+ * @version		0.1
+ * @author 		Tamás Barta <barta.tamas.d@gmail.com>
+ * @license 	MIT License
  */
+
 class Gravatar
 {
 	/**
