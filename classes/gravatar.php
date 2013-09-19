@@ -13,62 +13,129 @@ class Gravatar
 {
 	/**
 	 * Holds the email set for this instance
+	 *
 	 * @var string
 	 */
 	protected $email = null;
 
-	protected $config = array(
-		'protocol' => null,
-		'avatar'   => array(
-			'size'    => null,
-			'default' => null,
-			'force'   => false,
-			'rating'  => null,
-		),
-	);
+	/**
+	 * Hashed email
+	 *
+	 * @var string
+	 */
+	protected $hash = null;
 
-	function __construct(array $config = array()) {
-		$this->config = \Arr::merge(\Arr::merge($this->config, \Config::load('gravatar')), $config);
+	/**
+	 * Config array
+	 *
+	 * @var array
+	 */
+	protected $config = array();
+
+
+	public function __construct(array $config = array()) {
+		$this->config = $config;
 	}
 
+	/**
+	 * Init function
+	 *
+	 * @return void
+	 */
+	public static function _init()
+	{
+		\Config::load('gravatar', true);
+	}
+
+	/**
+	 * Gravatar forge
+	 *
+	 * @param  string $email  Email address
+	 * @param  array  $config Config array
+	 * @return Gravatar       Instance
+	 */
 	public static function forge($email, array $config = array())
 	{
+		$config = \Arr::merge(\Config::get('gravatar', array()), $config);
 		$instance = new static($config);
 		$instance->set_email($email);
 		return $instance;
 	}
 
-	public function set_email($email)
+	/**
+	* Get a driver config setting.
+	*
+	* @param string $key the config key
+	* @param mixed  $default the default value
+	* @return mixed the config setting value
+	*/
+	public function get_config($key, $default = null)
 	{
-		$this->email = $email;
+		return \Arr::get($this->config, $key, $default);
+	}
+
+	/**
+	* Set a driver config setting.
+	*
+	* @param string $key the config key
+	* @param mixed $value the new config value
+	* @return object $this for chaining
+	*/
+	public function set_config($key, $value)
+	{
+		\Arr::set($this->config, $key, $value);
+
 		return $this;
 	}
 
+	/**
+	 * Get email
+	 *
+	 * @return string Email address
+	 */
 	public function get_email()
 	{
 		return $this->email;
 	}
 
-	public function get_config($key = null)
+	/**
+	 * Set email and hash
+	 *
+	 * @param  string $email Email address
+	 * @return $this
+	 */
+	public function set_email($email)
 	{
-		return \Arr::get($this->config, $key, null);
-	}
-
-	public function set_config($key, $value)
-	{
-		\Arr::set($this->config, $key, $value);
+		$email = strtolower(trim($email));
+		$this->email = $email;
+		$this->hash = md5($email);
 		return $this;
 	}
 
-	public function url()
+	public function avatar($img = true)
 	{
-		$protocol = $this->config['avatar']['protocol'] ? : strtolower(\Input::protocol());
-		$config = array(
-			's' => $this->config['avatar']['size'],
-			'd' => $this->config['avatar']['default_image'],
-			'r' => strtolower($this->config['avatar']['rating']),
-		);
-		return $protocol . '://www.gravatar.com/avatar/' . md5( $this->email ) . '?' . http_build_query(array_filter($config));
+		$config = array_filter($this->get_config('avatar', array()));
+		$keys = array_map(function($value) { return substr($value, 0, 1); }, array_keys($config));
+		$config = array_combine($keys, $config);
+		\Arr::get($config, 'f', false) === true and \Arr::set($config, 'f', 'y');
+		$url = $this->url($config, 'www.gravatar.com/avatar/');
+
+		if ($img === true)
+		{
+			return \Html::img($url);
+		}
+
+		return $url;
+	}
+
+	public function url(array $query = array(), $url = 'www.gravatar.com')
+	{
+		$protocol = $this->get_config('protocol', strtolower(\Input::protocol()));
+		in_array($protocol, array('http', 'https')) or $protocol = strtolower(\Input::protocol());
+		$url = trim($url, '/');
+		$url = $protocol . '://' . $url . '/' . $this->hash;
+
+		return http_build_url($url . '?' . http_build_query($query));
 	}
 
 	public function img(array $attributes = array())

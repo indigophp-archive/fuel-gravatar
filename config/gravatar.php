@@ -22,8 +22,8 @@ return array(
 	/**
 	 * Protocol for request
 	 *
-	 * Valid values: http, https, null
-	 * In case of null and undefined \Input::protocol() is used.
+	 * Valid values: http, https
+	 * Default is \Input::protocol().
 	 */
 	'protocol' => null,
 
@@ -62,11 +62,39 @@ return array(
 		/**
 		* Image rating
 		*
-		* Valid values are: G, PG, R, X, null
-		* In case of null, G rated images are returned
+		* Valid values are: G, PG, R, X
 		*
 		* @link http://hu.gravatar.com/site/implement/images/#rating
 		*/
 		'rating'  => null,
+	),
+
+	/**
+	 * Profile related config
+	 */
+	'profile'  => array(
+		/**
+		 * Format of the returned profile
+		 *
+		 * Valid values: xml, json, php
+		 */
+		'format' => 'xml',
+
+		/**
+		 * JSON callback
+		 *
+		 * Valid values are any JavaScript functions.
+		 * Function wrapped around JSON result
+		 */
+		'callback' => null,
+
+		/**
+		 * QR code size
+		 *
+		 * Valid values are integers between 1 and 500.
+		 * Default: 80
+		 * Specifies the size of the image in pixels.
+		 */
+		'size' => null
 	),
 );
