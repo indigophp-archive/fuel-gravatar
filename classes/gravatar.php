@@ -50,9 +50,9 @@ class Gravatar
 	/**
 	 * Gravatar forge
 	 *
-	 * @param  string $email  Email address
-	 * @param  array  $config Config array
-	 * @return Gravatar       Instance
+	 * @param	string		$email	Email address
+	 * @param	array 		$config	Config array
+	 * @return	Gravatar 			Instance
 	 */
 	public static function forge($email, array $config = array())
 	{
@@ -65,9 +65,9 @@ class Gravatar
 	/**
 	* Get a driver config setting.
 	*
-	* @param string $key the config key
-	* @param mixed  $default the default value
-	* @return mixed the config setting value
+	* @param	string	$key		the config key
+	* @param	mixed	$default	the default value
+	* @return	mixed				the config setting value
 	*/
 	public function get_config($key, $default = null)
 	{
@@ -77,12 +77,19 @@ class Gravatar
 	/**
 	* Set a driver config setting.
 	*
-	* @param string $key the config key
-	* @param mixed $value the new config value
-	* @return object $this for chaining
+	* @param	string|array	$key	Config key or array of key-value pairs
+	* @param	mixed			$value	the new config value
+	* @return	$this					$this for chaining
 	*/
-	public function set_config($key, $value)
+	public function set_config($key, $value = null)
 	{
+		if (is_array($key))
+		{
+			foreach ($key as $k => $v)
+			{
+				$this->set_config($k, $v);
+			}
+		}
 		\Arr::set($this->config, $key, $value);
 
 		return $this;
@@ -91,7 +98,7 @@ class Gravatar
 	/**
 	 * Get email
 	 *
-	 * @return string Email address
+	 * @return	string	Email address
 	 */
 	public function get_email()
 	{
@@ -101,8 +108,8 @@ class Gravatar
 	/**
 	 * Set email and hash
 	 *
-	 * @param  string $email Email address
-	 * @return $this
+	 * @param 	string	$email	Email address
+	 * @return	$this			$this for chaining
 	 */
 	public function set_email($email)
 	{
@@ -112,41 +119,140 @@ class Gravatar
 		return $this;
 	}
 
-	public function avatar($img = true)
+	/**
+	 * Create URL
+	 *
+	 * @param	array	$query	Array of query elements
+	 * @param	string	$url	URL
+	 * @return	string			URL of resource
+	 */
+	protected function url($url, array $query = array())
 	{
-		$config = array_filter($this->get_config('avatar', array()));
-		$keys = array_map(function($value) { return substr($value, 0, 1); }, array_keys($config));
-		$config = array_combine($keys, $config);
-		\Arr::get($config, 'f', false) === true and \Arr::set($config, 'f', 'y');
-		$url = $this->url($config, 'www.gravatar.com/avatar/');
+		$protocol = $this->get_config('protocol', false);
+
+		if (is_bool($protocol))
+		{
+			$protocol = $protocol ? 'https' : 'http';
+		}
+		else
+		{
+			$protocol = strtolower(\Input::protocol());
+		}
+
+		$url = $protocol . '://' . $url;
+
+		return \Uri::create($url, array(), $query);
+	}
+
+	/**
+	 * Create avatar
+	 *
+	 * @param	boolean	$img	Return HTML img
+	 * @param	array	$attr	HTML img attributes
+	 * @return	string			URL of image or HTML img tag
+	 */
+	public function avatar($img = false, array $attr = array())
+	{
+		$config = array(
+			's' => $this->get_config('size'),
+			'd' => $this->get_config('default'),
+			'f' => $this->get_config('force', false) !== true ? null : 'y',
+			'r' => strtolower($this->get_config('rating'))
+		);
+		$config = array_filter($config);
+		$url = $this->url('www.gravatar.com/avatar/' . $this->hash, $config);
 
 		if ($img === true)
 		{
-			return \Html::img($url);
+			$attr = \Arr::merge(array(
+				'width'  => \Arr::get($config, 's', 80),
+				'height' => \Arr::get($config, 's', 80),
+				'alt'    => 'Gravatar'
+			), $attr);
+			return \Html::img($url, $attr);
 		}
 
 		return $url;
 	}
 
-	public function url(array $query = array(), $url = 'www.gravatar.com')
+	/**
+	 * Get profile from Gravatar
+	 *
+	 * @return array		Profile
+	 */
+	public function profile()
 	{
-		$protocol = $this->get_config('protocol', strtolower(\Input::protocol()));
-		in_array($protocol, array('http', 'https')) or $protocol = strtolower(\Input::protocol());
-		$url = trim($url, '/');
-		$url = $protocol . '://' . $url . '/' . $this->hash;
+		$format = $this->get_config('format', 'xml') ?: 'xml';
+		$config = array();
 
-		return http_build_url($url . '?' . http_build_query($query));
+		$format == 'json' and \Arr::set($config, 'c', $this->get_config('callback'));
+
+		$url = $this->url('www.gravatar.com/' . $this->hash . '.' . $format);
+
+		try
+		{
+			$request = \Request::forge($url, 'curl');
+			$request->add_param($config)->set_auto_format(true);
+			$format == 'php' and $request->set_mime_type('serialize');
+			$request->execute();
+			$response = $request->response();
+
+			if ($response->status == 200 and empty($response->body['error']))
+			{
+				$format == 'php' and $response->body['entry'] = reset($response->body['entry']);
+				$profile = $response->body['entry'];
+			}
+		}
+		catch (\RequestException $e)
+		{
+			return array();
+		}
+
+		return $profile;
 	}
 
-	public function img(array $attributes = array())
+	/**
+	 * Create QR-code
+	 *
+	 * @param	boolean	$img	Return HTML img
+	 * @param	array	$attr	HTML img attributes
+	 * @return	string			URL of image or HTML img tag
+	 */
+	public function qr($img = false, array $attr = array())
 	{
-		$default_attributes = array(
-			'width'  => $this->config['avatar']['size'],
-			'height' => $this->config['avatar']['size'],
-			'alt'    => 'Gravatar',
-		);
-		$attributes = \Arr::merge($default_attributes, $attributes);
-		return \Html::img($this->url(), $attributes);
+		$config = array_filter(array('s' => $this->get_config('size')));
+		$url = $this->url('www.gravatar.com/' . $this->hash . '.qr', $config);
+
+		if ($img === true)
+		{
+			$attr = \Arr::merge(array(
+				'width'  => \Arr::get($config, 's', 80),
+				'height' => \Arr::get($config, 's', 80),
+				'alt'    => 'Gravatar QR-code'
+			), $attr);
+			return \Html::img($url, $attr);
+		}
+
+		return $url;
 	}
 
+	/**
+	 * Create VCF link
+	 *
+	 * @param	boolean	$anchor		Return HTML anchor
+	 * @param	string	$title		HTML anchor title
+	 * @param	array	$attr		HTML anchor attributes
+	 * @return	string				URL of VCF or HTML anchor tag
+	 */
+	public function vcf($a = false, $title = '', array $attr = array())
+	{
+		$url = $this->url('www.gravatar.com/' . $this->hash . '.vcf');
+
+		if ($a === true)
+		{
+			return \Html::anchor($url, $title, $attr);
+		}
+
+		return $url;
+	}
 }
