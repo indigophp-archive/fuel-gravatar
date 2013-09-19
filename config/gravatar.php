@@ -19,20 +19,54 @@
  */
 
 return array(
-	// Can be http, https, or null. If null, the protocol of the current
-	// request is used
-	'protocol'		=> null,
+	/**
+	 * Protocol for request
+	 *
+	 * Valid values: http, https, null
+	 * In case of null and undefined \Input::protocol() is used.
+	 */
+	'protocol' => null,
 
-	// Valid values are integers, or null. Specifies the size parameter passed
-	// to Gravatar, if none is set on a Gravatar class instance.
-	'size'	=> null,
+	/**
+	 * Avatar related config
+	 */
+	'avatar'   => array(
+		/**
+		* Image size
+		*
+		* Valid values are integers between 1 and 2048
+		* Specifies the size of the image in pixels.
+		* Please consider that the most users have low-quality images.
+		*/
+		'size'    => null,
 
-	// Valid values are full URLs, or null. Specifies the default image
-	// parameter passed to Gravatar, if none is set on a Gravatar class
-	// instance.
-	'default_image'	=> null,
+		/**
+		* Default image
+		*
+		* Valid values: 404, mm, identicon, monsterid, wavatar, retro, blank
+		* Other valid values: URL, null
+		* If URL passed, it should NOT be urlencoded
+		*
+		* @link http://hu.gravatar.com/site/implement/images/#default-image
+		*/
+		'default' => null,
 
-	// Valid values are "G", "PG", "R", "X", null. Specifies the size parameter
-	// passed to Gravatar, if none is set on a Gravatar class instance.
-	'rating'		=> null,
+		/**
+		* Force default picture
+		*
+		* Valid values: true, flase
+		* Return the default image, even if the user is found
+		*/
+		'force'   => false,
+
+		/**
+		* Image rating
+		*
+		* Valid values are: G, PG, R, X, null
+		* In case of null, G rated images are returned
+		*
+		* @link http://hu.gravatar.com/site/implement/images/#rating
+		*/
+		'rating'  => null,
+	),
 );
