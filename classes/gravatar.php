@@ -18,10 +18,13 @@ class Gravatar
 	protected $email = null;
 
 	protected $config = array(
-		'size'          => null,
-		'default_image' => null,
-		'protocol'      => null,
-		'rating'        => null,
+		'protocol' => null,
+		'avatar'   => array(
+			'size'    => null,
+			'default' => null,
+			'force'   => false,
+			'rating'  => null,
+		),
 	);
 
 	function __construct(array $config = array()) {
@@ -59,11 +62,11 @@ class Gravatar
 
 	public function url()
 	{
-		$protocol = $this->config['protocol'] ? : strtolower(\Input::protocol());
+		$protocol = $this->config['avatar']['protocol'] ? : strtolower(\Input::protocol());
 		$config = array(
-			's' => $this->config['size'],
-			'd' => $this->config['default_image'],
-			'r' => strtolower($this->config['rating']),
+			's' => $this->config['avatar']['size'],
+			'd' => $this->config['avatar']['default_image'],
+			'r' => strtolower($this->config['avatar']['rating']),
 		);
 		return $protocol . '://www.gravatar.com/avatar/' . md5( $this->email ) . '?' . http_build_query(array_filter($config));
 	}
@@ -71,8 +74,8 @@ class Gravatar
 	public function img(array $attributes = array())
 	{
 		$default_attributes = array(
-			'width'  => $this->config['size'],
-			'height' => $this->config['size'],
+			'width'  => $this->config['avatar']['size'],
+			'height' => $this->config['avatar']['size'],
 			'alt'    => 'Gravatar',
 		);
 		$attributes = \Arr::merge($default_attributes, $attributes);
