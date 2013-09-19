@@ -1,8 +1,6 @@
 <?php
-
 /**
- *
- * FuelPHP Gravatar package configuration file.
+ * Fuel Gravatar
  *
  * @package 	Fuel
  * @subpackage	Gravatar
@@ -11,21 +9,73 @@
  * @license 	MIT License
  */
 
+/**
+ * NOTICE:
+ *
+ * If you need to make modifications to the default configuration, copy
+ * this file to your app/config folder, and make them in there.
+ *
+ * This will allow you to upgrade fuel without losing your custom config.
+ */
+
 return array(
-	// Can be http, https, or null. If null, the protocol of the current
-	// request is used
-	'protocol'		=> null,
+	/**
+	* Protocol for request
+	*
+	* Valid values: true (https), false (http), null (\Input::protocol())
+	* Default is \Input::protocol().
+	*/
+	'protocol' => null,
 
-	// Valid values are integers, or null. Specifies the size parameter passed
-	// to Gravatar, if none is set on a Gravatar class instance.
-	'size'	=> null,
+	/**
+	* Image and QR-code size
+	*
+	* Valid values are integers between 1 and 2048 for avatar and 1 and 500 for QR code
+	* Specifies the size of the image in pixels.
+	* Please consider that the most users have low-quality images.
+	*/
+	'size'     => null,
 
-	// Valid values are full URLs, or null. Specifies the default image
-	// parameter passed to Gravatar, if none is set on a Gravatar class
-	// instance.
-	'default_image'	=> null,
+	/**
+	* Default image
+	*
+	* Valid values: 404, mm, identicon, monsterid, wavatar, retro, blank
+	* Other valid values: URL, null
+	* If URL passed, it should NOT be urlencoded
+	*
+	* @link http://hu.gravatar.com/site/implement/images/#default-image
+	*/
+	'default'  => null,
 
-	// Valid values are "G", "PG", "R", "X", null. Specifies the size parameter
-	// passed to Gravatar, if none is set on a Gravatar class instance.
-	'rating'		=> null,
+	/**
+	* Force default picture
+	*
+	* Valid values: true, flase
+	* Return the default image, even if the user is found
+	*/
+	'force'    => false,
+
+	/**
+	* Image rating
+	*
+	* Valid values are: G, PG, R, X
+	*
+	* @link http://hu.gravatar.com/site/implement/images/#rating
+	*/
+	'rating'   => null,
+
+	/**
+	* Format of the returned profile
+	*
+	* Valid values: xml, json, php
+	*/
+	'format'   => 'xml',
+
+	/**
+	* JSON callback
+	*
+	* Valid values are any JavaScript functions.
+	* Function wrapped around JSON result
+	*/
+	'callback' => null,
 );
