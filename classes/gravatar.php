@@ -189,26 +189,39 @@ class Gravatar
 
 		$url = $this->url('www.gravatar.com/' . $this->hash . '.' . $format);
 
+		$request = \Request::forge($url, 'curl');
+		$format == 'php' and $format = 'serialize';
+		$request->add_param($config);
+
 		try
 		{
-			$request = \Request::forge($url, 'curl');
-			$request->add_param($config)->set_auto_format(true);
-			$format == 'php' and $request->set_mime_type('serialize');
 			$request->execute();
-			$response = $request->response();
-
-			if ($response->status == 200 and empty($response->body['error']))
-			{
-				$format == 'php' and $response->body['entry'] = reset($response->body['entry']);
-				$profile = $response->body['entry'];
-			}
 		}
-		catch (\RequestException $e)
+		catch (\RequestException $e) { }
+
+		$response = $request->response();
+
+		switch ($response->status)
 		{
-			return array();
+			case 200:
+				if ($this->get_config('auto', true) === true)
+				{
+					$response->body = \Format::forge($response->body, $format)->to_array();
+					$format == 'serialize' and $response->body['entry'] = reset($response->body['entry']);
+					$response->body = reset($response->body);
+				}
+				return $response->body;
+				break;
+			case 403:
+				throw new \FuelException('Gravatar: Access to service Forbidden');
+				break;
+			case 404:
+				throw new \FuelException('Gravatar: User not found (' . $this->email . ')');
+				break;
+			default:
+				throw new \FuelException('Gravatar: Unknown error');
+				break;
 		}
-
-		return $profile;
 	}
 
 	/**

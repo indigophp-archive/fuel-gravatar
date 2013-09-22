@@ -72,6 +72,13 @@ return array(
 	'format'   => 'xml',
 
 	/**
+	 * Autoformat the response
+	 *
+	 * Valid values: true, false
+	 */
+	'auto'     => true,
+
+	/**
 	* JSON callback
 	*
 	* Valid values are any JavaScript functions.
