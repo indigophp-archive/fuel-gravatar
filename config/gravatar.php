@@ -4,7 +4,7 @@
  *
  * @package 	Fuel
  * @subpackage	Gravatar
- * @version		0.1
+ * @version		0.2.1
  * @author 		Tamás Barta <barta.tamas.d@gmail.com>
  * @license 	MIT License
  */
@@ -70,6 +70,13 @@ return array(
 	* Valid values: xml, json, php
 	*/
 	'format'   => 'xml',
+
+	/**
+	 * Autoformat the response
+	 *
+	 * Valid values: true, false
+	 */
+	'auto'     => true,
 
 	/**
 	* JSON callback
