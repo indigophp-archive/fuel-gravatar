@@ -1,5 +1,5 @@
-Fuel Gravatar
-=============
+Fuel Gravatar 0.2.1
+===================
 
 Fuel package to get Avatar, Profile data, QR-code and VCF from Gravatar
 
