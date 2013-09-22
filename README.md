@@ -17,9 +17,9 @@ $gravatar = \Gravatar::forge('YOUR@EMAILADDRESS.COM');
 * ````size```` (integer | __null__): Size of avatar (1-2048 px) or QR-code (1-500 px). The default value is 80px.
 * ````default````: Default picture in case of none found (Values: 404, mm, identicon, monsterid, wavatar, retro, __blank__, URL)
 * ````force```` (true | __false__): Return the default image, even if the user is found
-* ````rating```` (__G__ | PG | R | X): Image rating. See [this](http://hu.gravatar.com/site/implement/images/#rating) link
-* ````format```` (__xml__, json, php): Format of returned data from server
-* ````auto```` (__true__ | false): Autoformat response
+* ````rating```` ( __G__ | PG | R | X): Image rating. See [this](http://hu.gravatar.com/site/implement/images/#rating) link
+* ````format```` ( __xml__, json, php): Format of returned data from server
+* ````auto```` ( __true__ | false): Autoformat response
 * ````callback```` (string): Function wrapped around JSON result
 
 ### Functions
