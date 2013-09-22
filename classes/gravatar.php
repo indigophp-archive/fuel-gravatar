@@ -252,7 +252,7 @@ class Gravatar
 	/**
 	 * Create VCF link
 	 *
-	 * @param	boolean	$anchor		Return HTML anchor
+	 * @param	boolean	$a			Return HTML anchor
 	 * @param	string	$title		HTML anchor title
 	 * @param	array	$attr		HTML anchor attributes
 	 * @return	string				URL of VCF or HTML anchor tag
