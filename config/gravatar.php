@@ -4,7 +4,7 @@
  *
  * @package 	Fuel
  * @subpackage	Gravatar
- * @version		0.2.1
+ * @version		0.3
  * @author 		Tamás Barta <barta.tamas.d@gmail.com>
  * @license 	MIT License
  */
