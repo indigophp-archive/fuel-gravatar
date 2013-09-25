@@ -1,0 +1,24 @@
+{
+	"name": "indigo-soft/fuel-gravatar",
+	"type": "fuel-package",
+	"description": "Gravatar package to return avatar, profile data, QR-code, VCF",
+	"keywords": ["Gravatar", "avatar", "profile"],
+	"homepage": "https://github.com/indigo-soft",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Tamás Barta",
+			"email": "barta.tamas.d@gmail.com"
+		},
+		{
+			"name": "Márk Sági-Kazár",
+			"email": "sagikazarmark@gmail.com"
+		}
+	],
+	"require": {
+		"composer/installers": "~1.0"
+	},
+	"extra": {
+		"installer-name": "gravatar"
+	}
+}
