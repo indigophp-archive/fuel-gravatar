@@ -7,6 +7,7 @@
  * @version		0.3
  * @author 		Tamás Barta <barta.tamas.d@gmail.com>
  * @license 	MIT License
+ * @link 		https://github.com/indigo-soft
  */
 
 class Gravatar
