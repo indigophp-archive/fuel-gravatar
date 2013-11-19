@@ -72,7 +72,18 @@ class Gravatar
 	*/
 	public function get_config($key = null, $default = null)
 	{
-		return is_null($key) ? $this->config : \Arr::get($this->config, $key, $default);
+		if (is_null($key))
+		{
+			return $this->config;
+		}
+		elseif (is_array($key))
+		{
+			return \Arr::subset($this->config, $key, $default);
+		}
+		else
+		{
+			return \Arr::get($this->config, $key, $default);
+		}
 	}
 
 	/**
