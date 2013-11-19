@@ -1,5 +1,5 @@
 {
-	"name": "indigo-soft/fuel-gravatar",
+	"name": "indigophp/fuel-gravatar",
 	"type": "fuel-package",
 	"description": "Gravatar package to return avatar, profile data, QR-code, VCF",
 	"keywords": ["Gravatar", "avatar", "profile"],
