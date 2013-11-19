@@ -7,6 +7,7 @@
  * @version		0.3
  * @author 		Tamás Barta <barta.tamas.d@gmail.com>
  * @license 	MIT License
+ * @link 		https://github.com/indigo-soft
  */
 
 class Gravatar
@@ -63,34 +64,54 @@ class Gravatar
 	}
 
 	/**
-	* Get a driver config setting.
+	* Get a driver config setting
 	*
-	* @param	string	$key		the config key
-	* @param	mixed	$default	the default value
-	* @return	mixed				the config setting value
+	* @param	string|null		$key		Config key
+	* @param	mixed			$default	Default value
+	* @return	mixed						Config setting value or the whole config array
 	*/
-	public function get_config($key, $default = null)
+	public function get_config($key = null, $default = null)
 	{
-		return \Arr::get($this->config, $key, $default);
+		if (is_null($key))
+		{
+			return $this->config;
+		}
+		elseif (is_array($key))
+		{
+			return \Arr::subset($this->config, $key, $default);
+		}
+		else
+		{
+			return \Arr::get($this->config, $key, $default);
+		}
 	}
 
 	/**
-	* Set a driver config setting.
+	* Set a driver config setting
 	*
-	* @param	string|array	$key	Config key or array of key-value pairs
-	* @param	mixed			$value	the new config value
-	* @return	$this					$this for chaining
+	* @param	string|array	$key		Config key or array of key-value pairs
+	* @param	mixed			$value		New config value
+	* @return	$this						$this for chaining
 	*/
 	public function set_config($key, $value = null)
 	{
+		// Merge config or just set an element
 		if (is_array($key))
 		{
-			foreach ($key as $k => $v)
+			// Set default values and merge config reverse order
+			if ($value === true)
 			{
-				$this->set_config($k, $v);
+				$this->config = \Arr::merge($key, $this->config);
+			}
+			else
+			{
+				$this->config = \Arr::merge($this->config, $key);
 			}
 		}
-		\Arr::set($this->config, $key, $value);
+		else
+		{
+			\Arr::set($this->config, $key, $value);
+		}
 
 		return $this;
 	}
