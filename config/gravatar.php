@@ -4,10 +4,11 @@
  *
  * @package 	Fuel
  * @subpackage	Gravatar
- * @version		0.3
- * @author 		Tamás Barta <barta.tamas.d@gmail.com>
+ * @version		0.4.0
+ * @author		Indigo Development Team
  * @license 	MIT License
- * @link 		https://github.com/indigo-soft
+ * @copyright	2013 - 2014 Indigo Development Team
+ * @link		https://indigophp.com
  */
 
 /**
@@ -35,7 +36,7 @@ return array(
 	* Specifies the size of the image in pixels.
 	* Please consider that the most users have low-quality images.
 	*/
-	'size'     => null,
+	'size' => null,
 
 	/**
 	* Default image
@@ -46,7 +47,7 @@ return array(
 	*
 	* @link http://hu.gravatar.com/site/implement/images/#default-image
 	*/
-	'default'  => null,
+	'default' => null,
 
 	/**
 	* Force default picture
@@ -54,7 +55,7 @@ return array(
 	* Valid values: true, flase
 	* Return the default image, even if the user is found
 	*/
-	'force'    => false,
+	'force' => false,
 
 	/**
 	* Image rating
@@ -63,21 +64,21 @@ return array(
 	*
 	* @link http://hu.gravatar.com/site/implement/images/#rating
 	*/
-	'rating'   => null,
+	'rating' => null,
 
 	/**
 	* Format of the returned profile
 	*
 	* Valid values: xml, json, php
 	*/
-	'format'   => 'xml',
+	'format' => 'xml',
 
 	/**
 	 * Autoformat the response
 	 *
 	 * Valid values: true, false
 	 */
-	'auto'     => true,
+	'auto_format' => true,
 
 	/**
 	* JSON callback
