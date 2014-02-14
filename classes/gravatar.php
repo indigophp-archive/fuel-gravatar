@@ -5,9 +5,10 @@
  * @package 	Fuel
  * @subpackage	Gravatar
  * @version		0.3
- * @author 		Tamás Barta <barta.tamas.d@gmail.com>
+ * @author		Indigo Development Team
  * @license 	MIT License
- * @link 		https://github.com/indigo-soft
+ * @copyright	2013 - 2014 Indigo Development Team
+ * @link		https://indigophp.com
  */
 
 class Gravatar
@@ -72,11 +73,7 @@ class Gravatar
 	*/
 	public function get_config($key = null, $default = null)
 	{
-		if (is_null($key))
-		{
-			return $this->config;
-		}
-		elseif (is_array($key))
+		if (is_array($key))
 		{
 			return \Arr::subset($this->config, $key, $default);
 		}
@@ -225,7 +222,7 @@ class Gravatar
 		switch ($response->status)
 		{
 			case 200:
-				if ($this->get_config('auto', true) === true)
+				if ($this->get_config('auto_format', true) === true)
 				{
 					$response->body = \Format::forge($response->body, $format)->to_array();
 					$format == 'serialize' and $response->body['entry'] = reset($response->body['entry']);

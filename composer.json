@@ -3,7 +3,7 @@
 	"type": "fuel-package",
 	"description": "Gravatar package to return avatar, profile data, QR-code, VCF",
 	"keywords": ["Gravatar", "avatar", "profile"],
-	"homepage": "https://github.com/indigo-soft",
+	"homepage": "https://indigophp.com",
 	"license": "MIT",
 	"authors": [
 		{
