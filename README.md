@@ -1,5 +1,9 @@
 # Fuel Gravatar
 
+[![Latest Stable Version](https://poser.pugx.org/indigophp/fuel-gravatar/v/stable.png)](https://packagist.org/packages/indigophp/fuel-gravatar)
+[![Total Downloads](https://poser.pugx.org/indigophp/fuel-gravatar/downloads.png)](https://packagist.org/packages/indigophp/fuel-gravatar)
+[![License](https://poser.pugx.org/indigophp/fuel-gravatar/license.png)](https://packagist.org/packages/indigophp/fuel-gravatar)
+
 **Fuel package to get Avatar, Profile data, QR-code and VCF from Gravatar**
 
 
