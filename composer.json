@@ -16,9 +16,16 @@
         }
     ],
     "require": {
-        "composer/installers": "~1.0"
+        "composer/installers": "~1.0",
+        "indigophp/fuel-core": "dev-develop"
+    },
+    "autoload": {
+        "psr-4": {
+            "Indigo\\Fuel\\": "classes/"
+        }
     },
     "extra": {
         "installer-name": "gravatar"
-    }
+    },
+    "minimum-stability": "dev"
 }

@@ -53,7 +53,7 @@ $gravatar->vcf(true, 'Link to VCF', array('class' => 'gravatar'));
 
 ## Configuration
 
-* ```protocol``` (true | false | __null__): use https (true) or http (false). Leaving unset or setting to null means ```\Input::protocol()``` will be used.
+* ```protocol``` (http | https | __null__): use https or http. Leaving unset or setting to null means ```\Input::protocol()``` will be used.
 * ```size``` (integer | __null__): Size of avatar (1-2048 px) or QR-code (1-500 px). The default value is 80px.
 * ```default```: Default picture in case of none found (Values: 404, mm, identicon, monsterid, wavatar, retro, __blank__, URL)
 * ```force``` (true | __false__): Return the default image, even if the user is found

@@ -1,14 +1,12 @@
 <?php
-/**
- * Fuel Gravatar
+
+/*
+ * This file is part of the Fuel Gravatar package.
  *
- * @package 	Fuel
- * @subpackage	Gravatar
- * @version		0.4.0
- * @author		Indigo Development Team
- * @license 	MIT License
- * @copyright	2013 - 2014 Indigo Development Team
- * @link		https://indigophp.com
+ * (c) Indigo Development Team
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
 /**
@@ -24,8 +22,8 @@ return array(
 	/**
 	* Protocol for request
 	*
-	* Valid values: true (https), false (http), null (\Input::protocol())
-	* Default is \Input::protocol().
+	* Valid values: https, http, null (\Input::protocol())
+	* Default is null.
 	*/
 	'protocol' => null,
 
